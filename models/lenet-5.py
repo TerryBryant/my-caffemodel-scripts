@@ -36,7 +36,7 @@ def inner_product_layer(net, from_layer, out_layer, use_relu, num_output, lr_mul
             dict(lr_mult=lr_mult),
             dict(lr_mult=2 * lr_mult)],
         'weight_filler': dict(type='xavier'),
-        'bias_filler': dict(type='constant', value=0)
+        'bias_filler': dict(type='constant')
     }
 
     product_name = '{}{}{}'.format(product_prefix, out_layer, product_postfix)
@@ -65,10 +65,12 @@ if __name__ == '__main__':
                              transform_param=dict(scale=1. / 255),
                              include=dict(phase=0),     # 0 for TRAIN and 1 for TEST
                              ntop=2)
+
+    # todo -- how to make train Data layer and test Data layer share the same name
     n.data2, n.label2 = L.Data(data_param=dict(batch_size=100, backend=P.Data.LMDB, source='path-to-lmdb'),
-                             transform_param=dict(scale=1. / 255),
-                             include=dict(phase=1),
-                             ntop=2)
+                               transform_param=dict(scale=1. / 255),
+                               include=dict(phase=1),
+                               ntop=2)
 
     lenet5_body(n, from_layer='data')
     n.accuracy = L.Accuracy(n.ip2, n.label, include=dict(phase=1))
