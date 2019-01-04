@@ -25,7 +25,7 @@ def conv_layer(net, from_layer, out_layer, use_relu, num_output,
     net[conv_name] = L.Convolution(net[from_layer], num_output=num_output,
                                    kernel_size=kernel_size, pad=pad, stride=stride, **kwargs)
     if use_relu:
-        relu_name = '/relu'.format(conv_name)
+        relu_name = '{}/relu'.format(conv_name)
         net[relu_name] = L.ReLU(net[conv_name], in_place=True)
 
 
